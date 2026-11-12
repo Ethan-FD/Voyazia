@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyazia — Le monde à portée de clic</title>
+<style>
+:root{--navy:#102B5C;--royal:#1764E8;--mist:#DCEBFA;--bg:#F4F7FB;--card:#fff;--slate:#64748B;--night:#091A35;--ink:#102B5C;--sea:#EAF2FB;--land:#fff;--line:#e2e8f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1426;--card:#13213c;--ink:#e8eefb;--sea:#0f1d36;--land:#26395e;--line:#24365a;--slate:#9fb0cc;--mist:#1c3158}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px;height:auto}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,Inter,system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{margin:0;letter-spacing:-.02em}button{font:inherit;cursor:pointer}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:21px;color:var(--ink);text-decoration:none}
+.logo svg{width:28px;height:28px}.links{display:flex;gap:4px;margin:0 auto}
+.links a{padding:8px 14px;border-radius:99px;color:var(--slate);text-decoration:none;font-weight:600;font-size:14px;transition:.2s}
+.links a:hover,.links a.on{background:var(--mist);color:var(--ink)}
+.btn{border:0;border-radius:14px;padding:11px 18px;font-weight:700;background:var(--royal);color:#fff;transition:.2s}.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn.ghost{background:var(--mist);color:var(--ink)}.btn.sm{padding:8px 14px;font-size:13px}
+.wrap{max-width:1360px;margin:auto;padding:0 24px}
+.hero{padding:44px 0 24px;display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:end}
+.eyebrow{font-size:12px;letter-spacing:.18em;font-weight:800;color:var(--royal)}
+h1{font-size:clamp(34px,5.4vw,64px);line-height:1.02;margin:10px 0 14px}
+.hero p{color:var(--slate);font-size:17px;max-width:540px;margin:0}
+.sbox{position:relative}.sbox input{width:100%;padding:16px 18px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;box-shadow:0 6px 20px #10305c14}
+.res{position:absolute;left:0;right:0;top:58px;background:var(--card);border-radius:16px;box-shadow:0 14px 40px #10305c30;z-index:20;overflow:hidden}
+.res button{display:block;width:100%;text-align:left;padding:11px 16px;border:0;background:none;color:var(--ink)}.res button:hover{background:var(--mist)}
+.cta{display:flex;gap:14px;align-items:center;margin-top:12px;flex-wrap:wrap}.cta a{color:var(--royal);font-weight:700;text-decoration:none}
+.mapwrap{position:relative;border-radius:22px;overflow:hidden;background:var(--sea);height:clamp(380px,62vh,700px);box-shadow:0 10px 40px #10305c1c}
+#map{width:100%;height:100%}
+.jvm-container{background:transparent!important;position:relative;overflow:hidden;touch-action:none}.jvm-tooltip{display:none;position:absolute;background:var(--navy);color:#fff;padding:4px 9px;border-radius:8px;font-size:12px;white-space:nowrap;z-index:6}.jvm-tooltip.active{display:block}.jvm-region{transition:fill .25s}
+.jvm-zoom-btn{position:absolute;left:16px;width:38px;height:38px;border-radius:12px;background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 14px #10305c25;cursor:pointer;user-select:none}
+.jvm-zoomin{top:16px}.jvm-zoomout{top:62px}
+.jvm-region.vis{fill:#102B5C!important}.jvm-region.wish{fill:#1764E8!important}.jvm-region.dim{opacity:.55}.jvm-region.cur{fill:#7fb2f5!important}
+.tools{position:absolute;top:16px;right:16px;display:flex;gap:6px;background:var(--card);padding:5px;border-radius:14px;box-shadow:0 4px 14px #10305c25;z-index:5}
+.tools button{border:0;background:none;color:var(--slate);padding:7px 12px;border-radius:10px;font-weight:700;font-size:13px}.tools button.on{background:var(--navy);color:#fff}
+.legend{position:absolute;left:16px;bottom:16px;background:var(--card);border-radius:12px;padding:8px 12px;font-size:12px;display:flex;gap:12px;color:var(--slate);box-shadow:0 4px 14px #10305c25;flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+.panel{position:absolute;top:0;right:0;bottom:0;width:340px;max-width:100%;background:var(--card);transform:translateX(105%);transition:transform .3s;z-index:10;overflow:auto;box-shadow:-10px 0 40px #10305c25}
+.panel.open{transform:none}
+.ph{height:150px;overflow:hidden;display:flex;align-items:flex-end;padding:16px;color:#fff;position:relative}.ph .fl{font-size:44px;line-height:1}
+.x{z-index:2;position:absolute;top:10px;right:10px;border:0;background:#0006;color:#fff;border-radius:99px;width:34px;height:34px;font-size:18px}
+.pb{padding:18px;display:grid;gap:12px}.pb h2{font-size:26px}.pb small{color:var(--slate)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}dt{color:var(--slate)}dd{margin:0;font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 0;align-items:center}
+.st{background:var(--card);border-radius:16px;padding:14px 16px}.st b{font-size:28px;display:block}.st span{color:var(--slate);font-size:13px}
+.msg{grid-column:1/-1;background:var(--navy);color:#fff;border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+section{padding:56px 0}h2.t{font-size:clamp(26px,3.4vw,40px);margin-bottom:22px}
+.mosaic{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:150px;gap:14px}
+.tile{border:0;border-radius:20px;color:#fff;text-align:left;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;transition:.25s;position:relative;overflow:hidden}
+.tile:hover{transform:scale(1.015)}.tile b{font-size:20px}.tile span{opacity:.9;font-size:13px}.tile em{position:absolute;top:14px;left:16px;font-style:normal;font-size:11px;letter-spacing:.1em;background:#ffffff30;padding:3px 9px;border-radius:99px}
+.t1{grid-column:span 3;grid-row:span 2}.t2{grid-column:span 3}.t3{grid-column:span 3}.t4{grid-column:span 2}.t5{grid-column:span 2}.t6{grid-column:span 2}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.four .tile{height:230px}
+.dark{background:var(--night);color:#fff;border-radius:28px;padding:48px;text-align:center}.dark p{opacity:.8}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:var(--mist);padding:7px 12px;border-radius:99px;font-weight:600;font-size:14px;border:0;color:var(--ink)}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:11px 18px;border-radius:14px;opacity:0;transition:.3s;z-index:99;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
+dialog{border:0;border-radius:22px;padding:26px;max-width:440px;width:90%;background:var(--card);color:var(--ink)}dialog::backdrop{background:#091a3599}
+dialog input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);margin:12px 0;background:var(--bg);color:var(--ink);font:inherit}
+footer{padding:30px 0 50px;color:var(--slate);font-size:13px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}.links{order:3;width:100%;overflow-x:auto;margin:0}.stats{grid-template-columns:1fr 1fr}.mosaic{grid-template-columns:1fr 1fr}.mosaic .tile{grid-column:span 1!important;grid-row:span 1!important;grid-row:auto}.four{grid-template-columns:1fr 1fr}.wrap{padding:0 14px}nav{padding:10px 14px}.mapwrap{height:68vh}
+.panel{top:auto;width:100%;height:62%;transform:translateY(105%);border-radius:22px 22px 0 0}.panel.open{transform:none}.tools{top:auto;bottom:16px;right:16px}.legend{display:none}.dark{padding:30px 18px}}
+.mb{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin:8px 0 6px}.mb i{font-style:normal;text-align:center;font-size:11px;padding:6px 0;border-radius:6px;background:var(--bg);color:var(--slate)}.mb i.on{background:var(--royal);color:#fff;font-weight:800}#lang{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px 10px;font:inherit;font-size:13px}.warn{background:#fff4e5;color:#8a4b00;padding:10px 12px;border-radius:12px;font-size:13px;margin:0}.legend s{text-decoration:none}</style></head><body>
+<nav>
+<a class="logo" href="#top"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#102B5C"/><path d="M6 15l20-8-6 18-5-7z" fill="#fff"/><path d="M15 18l11-11" stroke="#1764E8" stroke-width="1.6"/></svg>Voyazia</a>
+<div class="links"><a href="#carte" class="on" data-i="nav1"></a><a href="#inspi" data-i="nav2"></a><a href="#dest" data-i="nav3"></a><a href="#aventures" data-i="nav4"></a></div>
+<select id="lang" aria-label="Langue / Language"><option value="fr">🌐 Français</option><option value="en">🌐 English</option><option value="es">🌐 Español</option></select>
+<button class="btn ghost sm" id="favBtn" data-i="favs"></button><button class="btn sm" id="loginBtn"></button>
+</nav>
+<div class="wrap" id="top">
+<div class="hero"><div><div class="eyebrow" data-i="eyebrow"></div><h1 data-i="h1"></h1><p data-i="intro"></p></div>
+<div><div class="sbox"><input id="q" data-ph="ph" autocomplete="off"><div class="res" id="res" hidden></div></div>
+<div class="cta"><button class="btn" onclick="document.getElementById('carte').scrollIntoView()" data-i="explore"></button><a href="#inspi" data-i="discover"></a></div></div></div>
+<div class="mapwrap" id="carte"><div id="map"></div>
+<div class="tools" id="tools"><button class="on" data-m="all" data-i="all"></button><button data-m="carnet" data-i="carnet"></button><button data-m="envies" data-i="wishes"></button></div>
+<div class="legend"><span><i style="background:#102B5C"></i><s data-i="legV"></s></span><span><i style="background:#1764E8"></i><s data-i="legW"></s></span><span><i style="background:#7fb2f5"></i><s data-i="legS"></s></span><span><i style="background:var(--land)"></i><s data-i="legN"></s></span></div>
+<aside class="panel" id="panel"></aside></div>
+<div class="stats" id="stats"></div>
+<section id="dest"><h2 class="t" data-i="destT"></h2><div class="mosaic" id="mosaic"></div></section>
+<section id="inspi"><h2 class="t" data-i="wantsT"></h2><div class="four" id="four"></div></section>
+<section id="aventures"><h2 class="t" data-i="advT"></h2><div id="adv"></div></section>
+<div class="dark"><h2 style="font-size:clamp(28px,4vw,46px)" data-i="ctaT"></h2><p data-i="ctaP"></p><button class="btn" onclick="login()" data-i="ctaB"></button></div>
+<footer data-i="foot"></footer>
+<p class="legal" style="margin:-30px 0 40px;font-size:13px"><a id="legalLink" href="mentions-legales.html" style="color:var(--royal);font-weight:700">Mentions légales</a></p>
+</div>
+<div class="toast" id="toast"></div>
+<dialog id="dlg"><h3 data-i="loginT"></h3><p style="color:var(--slate);font-size:14px" data-i="loginP"></p><input id="uname" data-ph="namePh" maxlength="30"><div class="row"><button class="btn" id="ok" data-i="cont"></button><button class="btn ghost" id="cancel" data-i="cancel"></button></div></dialog>
+<dialog id="disc"></dialog>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
+<script>(function(){var a=jsVectorMap.addMap;jsVectorMap.addMap=function(n,m){window.__W=m;return a.call(this,n,m)}})()</script>
+<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
+<script>
+const T={fr:{warn:"⚠ Avant tout voyage, consultez les conseils aux voyageurs de votre gouvernement : la situation sur place peut être dangereuse.",nav1:"Explorer",nav2:"Inspirations",nav3:"Destinations",nav4:"Communauté",favs:"♡ Favoris",login:"Se connecter",logout:"Déconnexion",eyebrow:"LE MONDE À PORTÉE DE CLIC",h1:"Le monde est à vous. Explorez-le.",intro:"Découvrez de nouvelles destinations, préparez vos prochaines aventures et retracez les pays qui ont marqué votre histoire.",ph:"Où souhaitez-vous partir ?",explore:"Explorer le monde",discover:"Découvrir les inspirations →",all:"Tous les pays",carnet:"Mon carnet",wishes:"Mes envies",legV:"Visité",legW:"Envie",legS:"Sélection",legN:"Non visité",destT:"Où partir ensuite ?",wantsT:"Voyagez selon vos envies",advT:"Vos prochaines aventures",ctaT:"Le monde vous attend.",ctaP:"Construisez votre propre histoire de voyage avec Voyazia.",ctaB:"Créer mon carnet de voyage",foot:"Voyazia · version démo : comptes et données stockés localement dans ce navigateur (pas de serveur). Descriptions et meilleurs moments pour 168 pays (les territoires disputés ou inhabités n\'ont qu\'un nom).",loginT:"Se connecter",loginP:"Mode démo : le profil est enregistré uniquement dans ce navigateur, sans mot de passe ni synchronisation serveur.",namePh:"Votre prénom",cont:"Continuer",cancel:"Annuler",startT:"Votre aventure commence ici",startP:"Connectez-vous pour créer votre carte personnelle et suivre vos découvertes.",firstT:"Chaque grande aventure commence quelque part.",firstP:"Quel sera votre premier pays ?",stV:"Pays visités",stC:"Continents explorés",stL:"Pays à découvrir",stP:"Du monde exploré",none:"Aucun pays pour l'instant.",favT:"Favoris",wishT:"Envies de voyage",noRes:"Aucun résultat",welcome:"Bienvenue, ",bye:"Déconnecté",markV:"+ Marquer comme visité",isV:"✓ Déjà visité",fav:"♡ Favori",isFav:"♥ Favori",wish:"☆ Envie",isWish:"★ Envie",disc:"Découvrir cette destination",cap:"Capitale",lng:"Langues",cur:"Monnaie",bud:"Budget",best:"Meilleurs moments pour visiter",soon:"La description et les meilleurs moments de ce pays ne sont pas encore renseignés, mais vous pouvez le marquer.",addV:" ajouté à votre carnet",remV:"Retiré du carnet",addF:"Ajouté aux favoris",remF:"Retiré des favoris",addW:"Ajouté à vos envies",remW:"Retiré de vos envies",mustSee:"Incontournables",perDay:"≈ {n} €/jour",close:"Fermer",createAcc:"Créer mon compte",needAcc:"Créez votre compte pour retrouver ici vos favoris et vos envies.",sel:"Sélection",saveFail:"Enregistrement impossible",noDetail:"Fiche détaillée à venir",
+c_eu:"Europe",c_as:"Asie",c_af:"Afrique",c_na:"Amérique du Nord",c_sa:"Amérique du Sud",c_oc:"Océanie",k_plage:"plage",k_aventure:"aventure",k_culture:"culture",k_gastronomie:"gastronomie",k_nature:"nature",w1:"Évasion au soleil",w2:"Aventure et grands espaces",w3:"Culture et patrimoine",w4:"Escapades gastronomiques",seeSel:"Voir la sélection →"},
+en:{warn:"⚠ Before any trip, check your government\'s travel advisories: the situation on the ground may be dangerous.",nav1:"Explore",nav2:"Inspiration",nav3:"Destinations",nav4:"Community",favs:"♡ Favorites",login:"Sign in",logout:"Sign out",eyebrow:"THE WORLD AT YOUR FINGERTIPS",h1:"The world is yours. Explore it.",intro:"Discover new destinations, plan your next adventures and trace the countries that shaped your story.",ph:"Where would you like to go?",explore:"Explore the world",discover:"Discover inspiration →",all:"All countries",carnet:"My journal",wishes:"My wishlist",legV:"Visited",legW:"Wishlist",legS:"Selected",legN:"Not visited",destT:"Where to next?",wantsT:"Travel your way",advT:"Your next adventures",ctaT:"The world is waiting.",ctaP:"Build your own travel story with Voyazia.",ctaB:"Create my travel journal",foot:"Voyazia · demo version: accounts and data are stored locally in this browser (no server). Descriptions and best times for 168 countries (disputed or uninhabited territories show a name only).",loginT:"Sign in",loginP:"Demo mode: your profile is saved only in this browser, with no password or server sync.",namePh:"Your first name",cont:"Continue",cancel:"Cancel",startT:"Your adventure starts here",startP:"Sign in to create your personal map and track your discoveries.",firstT:"Every great adventure starts somewhere.",firstP:"What will your first country be?",stV:"Countries visited",stC:"Continents explored",stL:"Countries to discover",stP:"Of the world explored",none:"No countries yet.",favT:"Favorites",wishT:"Travel wishlist",noRes:"No results",welcome:"Welcome, ",bye:"Signed out",markV:"+ Mark as visited",isV:"✓ Visited",fav:"♡ Favorite",isFav:"♥ Favorite",wish:"☆ Wishlist",isWish:"★ Wishlist",disc:"Discover this destination",cap:"Capital",lng:"Languages",cur:"Currency",bud:"Budget",best:"Best times to visit",soon:"This country's description and best times are not available yet, but you can still mark it.",addV:" added to your journal",remV:"Removed from journal",addF:"Added to favorites",remF:"Removed from favorites",addW:"Added to your wishlist",remW:"Removed from your wishlist",mustSee:"Must-sees",perDay:"≈ €{n}/day",close:"Close",createAcc:"Create my account",needAcc:"Create your account to see your favorites and wishlist here.",sel:"Selection",saveFail:"Could not save",noDetail:"Detailed page coming soon",
+c_eu:"Europe",c_as:"Asia",c_af:"Africa",c_na:"North America",c_sa:"South America",c_oc:"Oceania",k_plage:"beach",k_aventure:"adventure",k_culture:"culture",k_gastronomie:"food",k_nature:"nature",w1:"Sunny escapes",w2:"Adventure & wild spaces",w3:"Culture & heritage",w4:"Food getaways",seeSel:"See the selection →"},
+es:{warn:"⚠ Antes de viajar, consulta las recomendaciones de viaje de tu gobierno: la situación sobre el terreno puede ser peligrosa.",nav1:"Explorar",nav2:"Inspiración",nav3:"Destinos",nav4:"Comunidad",favs:"♡ Favoritos",login:"Iniciar sesión",logout:"Cerrar sesión",eyebrow:"EL MUNDO A UN CLIC",h1:"El mundo es tuyo. Explóralo.",intro:"Descubre nuevos destinos, prepara tus próximas aventuras y recorre los países que marcaron tu historia.",ph:"¿A dónde quieres ir?",explore:"Explorar el mundo",discover:"Descubrir inspiraciones →",all:"Todos los países",carnet:"Mi diario",wishes:"Mis deseos",legV:"Visitado",legW:"Deseo",legS:"Selección",legN:"No visitado",destT:"¿A dónde ir ahora?",wantsT:"Viaja a tu manera",advT:"Tus próximas aventuras",ctaT:"El mundo te espera.",ctaP:"Construye tu propia historia de viaje con Voyazia.",ctaB:"Crear mi diario de viaje",foot:"Voyazia · versión demo: cuentas y datos guardados localmente en este navegador (sin servidor). Descripciones y mejores épocas para 168 países (los territorios en disputa o deshabitados solo muestran el nombre).",loginT:"Iniciar sesión",loginP:"Modo demo: el perfil se guarda solo en este navegador, sin contraseña ni sincronización con servidor.",namePh:"Tu nombre",cont:"Continuar",cancel:"Cancelar",startT:"Tu aventura empieza aquí",startP:"Inicia sesión para crear tu mapa personal y seguir tus descubrimientos.",firstT:"Toda gran aventura empieza en alguna parte.",firstP:"¿Cuál será tu primer país?",stV:"Países visitados",stC:"Continentes explorados",stL:"Países por descubrir",stP:"Del mundo explorado",none:"Aún no hay países.",favT:"Favoritos",wishT:"Deseos de viaje",noRes:"Sin resultados",welcome:"¡Bienvenido/a, ",bye:"Sesión cerrada",markV:"+ Marcar como visitado",isV:"✓ Ya visitado",fav:"♡ Favorito",isFav:"♥ Favorito",wish:"☆ Deseo",isWish:"★ Deseo",disc:"Descubrir este destino",cap:"Capital",lng:"Idiomas",cur:"Moneda",bud:"Presupuesto",best:"Mejores épocas para visitar",soon:"La descripción y las mejores épocas de este país aún no están disponibles, pero puedes marcarlo.",addV:" añadido a tu diario",remV:"Quitado del diario",addF:"Añadido a favoritos",remF:"Quitado de favoritos",addW:"Añadido a tus deseos",remW:"Quitado de tus deseos",mustSee:"Imprescindibles",perDay:"≈ {n} €/día",close:"Cerrar",createAcc:"Crear mi cuenta",needAcc:"Crea tu cuenta para ver aquí tus favoritos y deseos.",sel:"Selección",saveFail:"No se pudo guardar",noDetail:"Ficha detallada próximamente",
+c_eu:"Europa",c_as:"Asia",c_af:"África",c_na:"América del Norte",c_sa:"América del Sur",c_oc:"Oceanía",k_plage:"playa",k_aventure:"aventura",k_culture:"cultura",k_gastronomie:"gastronomía",k_nature:"naturaleza",w1:"Escapadas al sol",w2:"Aventura y grandes espacios",w3:"Cultura y patrimonio",w4:"Escapadas gastronómicas",seeSel:"Ver la selección →"}};
+// k continent, cap, l langs, cur, b €/day, m best months, t type, g colors, hl highlights (fr|en|es), d description [fr,en,es]
+const D={
+JP:{k:"as",cap:"Tokyo|Tokyo|Tokio",l:["ja"],cur:"JPY",b:120,m:[3,4,10,11],t:"culture",g:"#c2185b,#102B5C",hl:["Kyoto et ses temples|Kyoto's temples|Templos de Kioto","Mont Fuji|Mount Fuji|Monte Fuji","Shibuya, Tokyo|Shibuya, Tokyo|Shibuya, Tokio","Nara"],d:["Temples millénaires, jardins zen et mégalopoles futuristes : le Japon marie tradition et hypermodernité. Printemps (cerisiers en fleurs) et automne (érables rouges) sont les plus beaux ; évitez la saison des pluies en juin.","Ancient temples, zen gardens and futuristic megacities: Japan blends tradition and hyper-modernity. Spring (cherry blossoms) and autumn (red maples) are the loveliest; avoid the June rainy season.","Templos milenarios, jardines zen y megaciudades futuristas: Japón une tradición e hipermodernidad. La primavera (cerezos en flor) y el otoño (arces rojos) son lo mejor; evita la temporada de lluvias de junio."]},
+BR:{k:"sa",cap:"Brasília|Brasília|Brasilia",l:["pt"],cur:"BRL",b:80,m:[5,6,7,8,9,10],t:"aventure",g:"#16a34a,#102B5C",hl:["Rio de Janeiro","Chutes d'Iguaçu|Iguaçu Falls|Cataratas del Iguazú","Amazonie|Amazon|Amazonia","Salvador"],d:["Plages mythiques, carnaval, forêt amazonienne et chutes géantes. La saison sèche (mai à octobre) est idéale pour la côte, Rio et le Pantanal ; l'Amazonie se visite toute l'année.","Legendary beaches, carnival, the Amazon rainforest and giant waterfalls. The dry season (May–October) suits the coast, Rio and the Pantanal; the Amazon can be visited year-round.","Playas míticas, carnaval, selva amazónica y cataratas gigantes. La estación seca (mayo a octubre) es ideal para la costa, Río y el Pantanal; la Amazonia se visita todo el año."]},
+FR:{k:"eu",cap:"Paris|Paris|París",l:["fr"],cur:"EUR",b:130,m:[5,6,9],t:"gastronomie",g:"#1764E8,#102B5C",hl:["Paris","Mont-Saint-Michel","Provence","Côte d'Azur|French Riviera|Costa Azul"],d:["Art de vivre, gastronomie, châteaux et paysages variés des Alpes à la Méditerranée. Mai, juin et septembre offrent un temps doux et moins de foule ; l'été est parfait pour la côte, l'hiver pour le ski.","Art de vivre, gastronomy, châteaux and landscapes from the Alps to the Mediterranean. May, June and September bring mild weather and fewer crowds; summer suits the coast, winter suits skiing.","Arte de vivir, gastronomía, castillos y paisajes variados, de los Alpes al Mediterráneo. Mayo, junio y septiembre ofrecen buen tiempo y menos gente; el verano es ideal para la costa y el invierno para esquiar."]},
+IT:{k:"eu",cap:"Rome|Rome|Roma",l:["it"],cur:"EUR",b:120,m:[4,5,6,9,10],t:"gastronomie",g:"#d97706,#102B5C",hl:["Rome|Rome|Roma","Venise|Venice|Venecia","Toscane|Tuscany|Toscana","Côte amalfitaine|Amalfi Coast|Costa Amalfitana"],d:["Chefs-d'œuvre antiques et Renaissance, cuisine inoubliable, lacs et côtes sublimes. Évitez la chaleur et la foule de juillet-août : avril-juin et septembre-octobre sont les meilleurs moments.","Ancient and Renaissance masterpieces, unforgettable food, lakes and stunning coastlines. Skip the July–August heat and crowds: April–June and September–October are best.","Obras maestras antiguas y renacentistas, cocina inolvidable, lagos y costas sublimes. Evita el calor y las multitudes de julio-agosto: abril-junio y septiembre-octubre son lo mejor."]},
+ES:{k:"eu",cap:"Madrid",l:["es"],cur:"EUR",b:100,m:[4,5,6,9,10],t:"plage",g:"#e11d48,#102B5C",hl:["Barcelone|Barcelona","Alhambra","Séville|Seville|Sevilla","Îles Canaries|Canary Islands|Islas Canarias"],d:["Soleil, tapas, fêtes et patrimoine mauresque. Printemps et automne conviennent aux villes (l'été est très chaud au sud) ; juin à septembre pour les plages, les Canaries se visitent toute l'année.","Sun, tapas, festivals and Moorish heritage. Spring and autumn suit the cities (summer is very hot in the south); June–September for beaches; the Canaries work year-round.","Sol, tapas, fiestas y patrimonio andalusí. Primavera y otoño son ideales para las ciudades (el verano es muy caluroso en el sur); de junio a septiembre para las playas; Canarias, todo el año."]},
+PT:{k:"eu",cap:"Lisbonne|Lisbon|Lisboa",l:["pt"],cur:"EUR",b:90,m:[5,6,7,8,9,10],t:"plage",g:"#0891b2,#102B5C",hl:["Lisbonne|Lisbon|Lisboa","Porto|Porto|Oporto","Algarve","Madère|Madeira"],d:["Azulejos, fado, océan et douceur de vivre. De mai à octobre pour le soleil et l'Algarve ; mai-juin et septembre pour éviter la foule tout en profitant du beau temps.","Azulejos, fado, ocean and a relaxed way of life. May–October for sunshine and the Algarve; May–June and September give good weather with fewer crowds.","Azulejos, fado, océano y dolce vita portuguesa. De mayo a octubre para el sol y el Algarve; mayo-junio y septiembre combinan buen tiempo y menos gente."]},
+GR:{k:"eu",cap:"Athènes|Athens|Atenas",l:["el"],cur:"EUR",b:95,m:[5,6,9,10],t:"plage",g:"#2563eb,#102B5C",hl:["Acropole|Acropolis|Acrópolis","Santorin|Santorini|Santorini","Crète|Crete|Creta","Météores|Meteora|Meteora"],d:["Îles blanches et bleues, sites antiques et mer turquoise. Mai-juin et septembre-octobre offrent mer chaude et peu de foule ; juillet-août est très chaud et bondé.","White-and-blue islands, ancient sites and turquoise seas. May–June and September–October bring warm seas and fewer crowds; July–August is hot and busy.","Islas blancas y azules, sitios antiguos y mar turquesa. Mayo-junio y septiembre-octubre ofrecen mar cálido y poca gente; julio-agosto es muy caluroso y concurrido."]},
+US:{k:"na",cap:"Washington, D.C.",l:["en"],cur:"USD",b:170,m:[4,5,6,9,10],t:"aventure",g:"#dc2626,#102B5C",hl:["New York","Grand Canyon","Californie|California","Yellowstone"],d:["Villes monde, route 66 et parcs nationaux géants. Le climat varie énormément : printemps et automne sont les plus sûrs, l'été pour les parcs du nord, l'hiver pour la Floride et le Sud-Ouest.","Global cities, Route 66 and giant national parks. Climates vary hugely: spring and autumn are safest, summer for northern parks, winter for Florida and the Southwest.","Ciudades globales, Ruta 66 y parques nacionales gigantes. El clima varía mucho: primavera y otoño son lo más seguro, verano para los parques del norte e invierno para Florida y el suroeste."]},
+CA:{k:"na",cap:"Ottawa",l:["en","fr"],cur:"CAD",b:130,m:[6,7,8,9],t:"aventure",g:"#059669,#102B5C",hl:["Banff","Québec|Quebec|Quebec","Vancouver","Niagara"],d:["Lacs turquoise, Rocheuses, villes cosmopolites et grands espaces. Juin à septembre pour la randonnée ; septembre pour les couleurs d'automne ; décembre à mars pour le ski et les aurores boréales.","Turquoise lakes, the Rockies, cosmopolitan cities and wide-open spaces. June–September for hiking; September for fall colours; December–March for skiing and northern lights.","Lagos turquesa, Rocosas, ciudades cosmopolitas y grandes espacios. De junio a septiembre para senderismo; septiembre para los colores del otoño; de diciembre a marzo para esquí y auroras boreales."]},
+MX:{k:"na",cap:"Mexico|Mexico City|Ciudad de México",l:["es"],cur:"MXN",b:70,m:[11,12,1,2,3,4],t:"culture",g:"#ea580c,#102B5C",hl:["Chichén Itzá|Chichén Itzá|Chichén Itzá","Oaxaca","Tulum","Mexico|Mexico City|Ciudad de México"],d:["Civilisations maya et aztèque, couleurs, street food et plages des Caraïbes. La saison sèche (novembre à avril) est idéale ; évitez la saison des ouragans de septembre-octobre sur les côtes.","Maya and Aztec heritage, colour, street food and Caribbean beaches. The dry season (November–April) is ideal; avoid the September–October hurricane season on the coasts.","Legado maya y azteca, color, comida callejera y playas del Caribe. La estación seca (noviembre a abril) es ideal; evita la temporada de huracanes de septiembre-octubre en las costas."]},
+PE:{k:"sa",cap:"Lima",l:["es","qu"],cur:"PEN",b:60,m:[5,6,7,8,9],t:"culture",g:"#b45309,#102B5C",hl:["Machu Picchu","Cusco|Cusco|Cuzco","Vallée sacrée|Sacred Valley|Valle Sagrado","Lima"],d:["Terre des Incas, sommets andins et gastronomie réputée. La saison sèche (mai à septembre) est la meilleure pour Machu Picchu et les treks ; de décembre à mars, la pluie rend les sentiers difficiles.","Land of the Incas, Andean peaks and renowned cuisine. The dry season (May–September) is best for Machu Picchu and treks; December–March rains make trails difficult.","Tierra de los incas, cumbres andinas y gastronomía reconocida. La estación seca (mayo a septiembre) es la mejor para Machu Picchu y los treks; de diciembre a marzo las lluvias complican los senderos."]},
+AR:{k:"sa",cap:"Buenos Aires",l:["es"],cur:"ARS",b:70,m:[10,11,12,1,2,3],t:"aventure",g:"#0ea5e9,#102B5C",hl:["Patagonie|Patagonia","Buenos Aires","Iguazú|Iguazu|Iguazú","Mendoza"],d:["Tango, vins de Mendoza, glaciers et steppes de Patagonie. L'été austral (octobre à mars) convient à la Patagonie ; le printemps et l'automne sont parfaits pour Buenos Aires et les vignobles.","Tango, Mendoza wines, glaciers and Patagonian steppe. The southern summer (October–March) suits Patagonia; spring and autumn are perfect for Buenos Aires and the vineyards.","Tango, vinos de Mendoza, glaciares y estepa patagónica. El verano austral (octubre a marzo) es ideal para la Patagonia; primavera y otoño son perfectos para Buenos Aires y los viñedos."]},
+MA:{k:"af",cap:"Rabat",l:["ar","zgh"],cur:"MAD",b:60,m:[3,4,5,10,11],t:"culture",g:"#b91c1c,#102B5C",hl:["Marrakech","Chefchaouen","Désert de Merzouga|Merzouga Desert|Desierto de Merzouga","Essaouira"],d:["Médinas colorées, désert, montagnes de l'Atlas et côte atlantique. Mars-mai et octobre-novembre évitent la fournaise de l'été ; le désert se visite surtout en hiver.","Colourful medinas, desert, Atlas mountains and Atlantic coast. March–May and October–November avoid the summer heat; the desert is best in winter.","Medinas de colores, desierto, montañas del Atlas y costa atlántica. Marzo-mayo y octubre-noviembre evitan el calor del verano; el desierto se visita mejor en invierno."]},
+EG:{k:"af",cap:"Le Caire|Cairo|El Cairo",l:["ar"],cur:"EGP",b:60,m:[10,11,12,1,2,3,4],t:"culture",g:"#ca8a04,#102B5C",hl:["Pyramides de Gizeh|Pyramids of Giza|Pirámides de Guiza","Louxor|Luxor|Luxor","Nil|Nile|Nilo","Mer Rouge|Red Sea|Mar Rojo"],d:["Pharaons, temples et croisières sur le Nil. D'octobre à avril, les températures sont supportables ; de juin à août, la chaleur est extrême dans le sud.","Pharaohs, temples and Nile cruises. From October to April temperatures are manageable; June–August brings extreme heat in the south.","Faraones, templos y cruceros por el Nilo. De octubre a abril las temperaturas son soportables; de junio a agosto el calor es extremo en el sur."]},
+ZA:{k:"af",cap:"Pretoria",l:["en","zu","xh","af"],cur:"ZAR",b:80,m:[5,6,7,8,9],t:"aventure",g:"#15803d,#102B5C",hl:["Parc Kruger|Kruger Park|Parque Kruger","Le Cap|Cape Town|Ciudad del Cabo","Route des Jardins|Garden Route|Ruta Jardín","Drakensberg"],d:["Safaris, vignobles, côtes spectaculaires et culture arc-en-ciel. L'hiver austral sec (mai à septembre) est idéal pour les safaris ; novembre à mars pour le Cap et les plages.","Safaris, vineyards, dramatic coasts and rainbow culture. The dry southern winter (May–September) is ideal for safaris; November–March for Cape Town and beaches.","Safaris, viñedos, costas espectaculares y cultura arcoíris. El invierno austral seco (mayo a septiembre) es ideal para safaris; de noviembre a marzo para Ciudad del Cabo y las playas."]},
+KE:{k:"af",cap:"Nairobi",l:["sw","en"],cur:"KES",b:110,m:[7,8,9,10,1,2],t:"aventure",g:"#65a30d,#102B5C",hl:["Masaï Mara|Maasai Mara|Masái Mara","Amboseli","Diani Beach","Lamu"],d:["Safaris dans la savane et rencontre avec les Masaïs. La grande migration des gnous a lieu de juillet à octobre ; janvier-février est aussi sec et propice à l'observation.","Savannah safaris and Maasai culture. The great wildebeest migration runs July–October; January–February is also dry and good for wildlife viewing.","Safaris en la sabana y cultura masái. La gran migración de ñus ocurre de julio a octubre; enero-febrero también es seco y propicio para ver fauna."]},
+TH:{k:"as",cap:"Bangkok",l:["th"],cur:"THB",b:55,m:[11,12,1,2],t:"plage",g:"#db2777,#102B5C",hl:["Bangkok","Chiang Mai","Phuket","Krabi"],d:["Temples dorés, street food et îles paradisiaques. De novembre à février, le temps est sec et plus frais ; la mousson (mai à octobre) est humide mais moins fréquentée.","Golden temples, street food and island paradises. November–February is dry and cooler; the monsoon (May–October) is wetter but quieter.","Templos dorados, comida callejera e islas paradisíacas. De noviembre a febrero el clima es seco y más fresco; el monzón (mayo a octubre) es lluvioso pero menos concurrido."]},
+IN:{k:"as",cap:"New Delhi|New Delhi|Nueva Delhi",l:["hi","en"],cur:"INR",b:45,m:[10,11,12,1,2,3],t:"culture",g:"#f97316,#102B5C",hl:["Taj Mahal","Rajasthan|Rajasthan|Rajastán","Kerala","Varanasi|Varanasi|Benarés"],d:["Palais, épices, spiritualité et diversité vertigineuse. D'octobre à mars, le climat est agréable dans le nord ; évitez la mousson (juin à septembre) et la canicule d'avril-mai.","Palaces, spices, spirituality and dizzying diversity. October–March is pleasant in the north; avoid the monsoon (June–September) and the April–May heat.","Palacios, especias, espiritualidad y una diversidad vertiginosa. De octubre a marzo el clima es agradable en el norte; evita el monzón (junio a septiembre) y el calor de abril-mayo."]},
+ID:{k:"as",cap:"Jakarta|Jakarta|Yakarta",l:["id"],cur:"IDR",b:50,m:[4,5,6,7,8,9,10],t:"plage",g:"#0d9488,#102B5C",hl:["Bali","Borobudur","Komodo","Raja Ampat"],d:["Volcans, rizières, temples et récifs coralliens parmi les plus riches du monde. La saison sèche (avril à octobre) est la meilleure ; la saison des pluies court de novembre à mars.","Volcanoes, rice terraces, temples and some of the world's richest coral reefs. The dry season (April–October) is best; the rains run November–March.","Volcanes, arrozales, templos y algunos de los arrecifes más ricos del mundo. La estación seca (abril a octubre) es la mejor; las lluvias van de noviembre a marzo."]},
+VN:{k:"as",cap:"Hanoï|Hanoi|Hanói",l:["vi"],cur:"VND",b:45,m:[2,3,4,10,11],t:"gastronomie",g:"#16a34a,#102B5C",hl:["Baie d'Halong|Ha Long Bay|Bahía de Ha Long","Hoi An","Hanoï|Hanoi|Hanói","Delta du Mékong|Mekong Delta|Delta del Mekong"],d:["Baies karstiques, villes anciennes et cuisine fine. Le pays s'étire du nord au sud : février-avril et octobre-novembre sont un bon compromis pour combiner nord, centre et sud.","Karst bays, old towns and fine cuisine. The country is long: February–April and October–November are a good compromise for combining north, centre and south.","Bahías kársticas, ciudades antiguas y cocina exquisita. El país es muy largo: febrero-abril y octubre-noviembre son un buen compromiso para combinar norte, centro y sur."]},
+AU:{k:"oc",cap:"Canberra",l:["en"],cur:"AUD",b:150,m:[9,10,11,3,4,5],t:"aventure",g:"#0284c7,#102B5C",hl:["Grande Barrière de corail|Great Barrier Reef|Gran Barrera de Coral","Sydney","Uluru","Great Ocean Road"],d:["Outback, récifs coralliens, surf et villes dynamiques. Le printemps (septembre à novembre) et l'automne (mars à mai) sont idéaux ; le nord tropical est le plus agréable de mai à octobre.","Outback, coral reefs, surf and lively cities. Spring (September–November) and autumn (March–May) are ideal; the tropical north is best May–October.","Outback, arrecifes de coral, surf y ciudades dinámicas. La primavera (septiembre a noviembre) y el otoño (marzo a mayo) son ideales; el norte tropical es mejor de mayo a octubre."]},
+NZ:{k:"oc",cap:"Wellington",l:["en","mi"],cur:"NZD",b:130,m:[12,1,2,3],t:"aventure",g:"#14b8a6,#102B5C",hl:["Milford Sound","Queenstown","Rotorua","Abel Tasman"],d:["Fjords, volcans, randonnées et sports d'aventure. L'été austral (décembre à mars) est idéal pour randonner ; juin à septembre pour le ski autour de Queenstown.","Fjords, volcanoes, hiking and adventure sports. The southern summer (December–March) is ideal for hiking; June–September for skiing around Queenstown.","Fiordos, volcanes, senderismo y deportes de aventura. El verano austral (diciembre a marzo) es ideal para caminar; de junio a septiembre para esquiar cerca de Queenstown."]},
+IS:{k:"eu",cap:"Reykjavik",l:["is"],cur:"ISK",b:160,m:[6,7,8,9],t:"nature",g:"#4f46e5,#102B5C",hl:["Cercle d'Or|Golden Circle|Círculo Dorado","Lagon bleu|Blue Lagoon|Laguna Azul","Jökulsárlón","Aurores boréales|Northern lights|Auroras boreales"],d:["Volcans, geysers, glaciers et soleil de minuit. De juin à août pour les routes ouvertes et les nuits claires ; de septembre à mars pour tenter les aurores boréales.","Volcanoes, geysers, glaciers and the midnight sun. June–August for open roads and bright nights; September–March for a chance at the northern lights.","Volcanes, géiseres, glaciares y sol de medianoche. De junio a agosto para carreteras abiertas y noches claras; de septiembre a marzo para intentar ver auroras boreales."]},
+TR:{k:"as",cap:"Ankara",l:["tr"],cur:"TRY",b:60,m:[4,5,6,9,10],t:"culture",g:"#e11d48,#102B5C",hl:["Istanbul","Cappadoce|Cappadocia|Capadocia","Pamukkale","Éphèse|Ephesus|Éfeso"],d:["À la croisée de l'Orient et de l'Occident : bazars, ruines antiques et paysages lunaires. Avril-juin et septembre-octobre sont les plus agréables ; l'été est très chaud sur la côte.","Where East meets West: bazaars, ancient ruins and lunar landscapes. April–June and September–October are the most pleasant; summer is very hot on the coast.","Donde Oriente y Occidente se encuentran: bazares, ruinas antiguas y paisajes lunares. Abril-junio y septiembre-octubre son lo más agradable; el verano es muy caluroso en la costa."]}};
+const TY={JP:"torii",IS:"mount",CA:"mount",NZ:"mount",PE:"mount",AR:"mount",US:"city",FR:"tower",IT:"dome",TR:"dome",IN:"dome",GR:"dome",EG:"pyr",MA:"pyr",MX:"pyr",KE:"sav",ZA:"sav",BR:"beach",TH:"beach",ID:"beach",ES:"beach",PT:"beach",AU:"beach",VN:"beach"};
+function scene(c){const d=D[c],g=d?d.g.split(","):["#1764E8","#102B5C"],t=TY[c]||"globe",N="#091A35";
+const sun=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#ffd36b" opacity=".92"/>`;
+const S={mount:sun(250,52,22)+`<polygon points="0,150 70,62 120,100 190,40 260,105 300,78 340,112 340,150" fill="#fff" opacity=".28"/><polygon points="0,150 40,98 100,132 170,88 240,136 300,102 340,140 340,150" fill="${N}" opacity=".6"/><polygon points="190,40 176,62 190,56 202,64" fill="#fff" opacity=".8"/>`,
+beach:sun(90,56,28)+`<rect y="98" width="340" height="52" fill="${N}" opacity=".45"/><path d="M0 112q20-8 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0" stroke="#fff" opacity=".4" fill="none"/><path d="M0 150q90-34 200-24t140 24z" fill="#f4d9a0" opacity=".85"/><path d="M262 140q-4-40 6-62" stroke="${N}" stroke-width="5" fill="none"/><path d="M268 78q-30-14-48 8M268 78q26-18 50-2M268 78q-8-26-34-26M268 78q16-24 38-18" stroke="${N}" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+city:sun(260,46,20)+[[10,70],[40,40],[72,85],[100,25],[134,60],[168,35],[204,78],[236,50],[270,88],[300,58]].map(([x,h])=>`<rect x="${x}" y="${h+20}" width="26" height="${130-h}" fill="${N}" opacity=".65"/>`).join("")+`<rect y="140" width="340" height="10" fill="${N}" opacity=".8"/>`,
+tower:sun(70,48,22)+`<polygon points="170,18 150,150 190,150" fill="${N}" opacity=".75"/><rect x="156" y="88" width="28" height="5" fill="#fff" opacity=".5"/><rect x="161" y="60" width="18" height="4" fill="#fff" opacity=".5"/><path d="M0 150q85-30 170-12t170-6v18z" fill="${N}" opacity=".5"/>`,
+pyr:sun(260,60,32)+`<polygon points="40,150 120,60 200,150" fill="${N}" opacity=".5"/><polygon points="160,150 235,86 310,150" fill="${N}" opacity=".7"/><path d="M0 150q80-26 170-6t170-14v20z" fill="#f0c97a" opacity=".85"/>`,
+torii:`<polygon points="40,150 150,38 260,150" fill="#fff" opacity=".3"/><polygon points="150,38 132,66 150,60 168,68" fill="#fff" opacity=".85"/>`+sun(270,36,18)+`<rect x="104" y="76" width="132" height="9" rx="3" fill="#d92a2a"/><rect x="116" y="96" width="108" height="6" fill="#d92a2a"/><rect x="122" y="76" width="9" height="74" fill="#d92a2a"/><rect x="209" y="76" width="9" height="74" fill="#d92a2a"/>`,
+dome:sun(60,44,20)+`<path d="M120 150V100a50 50 0 0 1 100 0v50z" fill="#fff" opacity=".85"/><rect x="167" y="36" width="6" height="22" fill="#fff" opacity=".85"/><rect x="82" y="80" width="14" height="70" fill="#fff" opacity=".6"/><rect x="244" y="80" width="14" height="70" fill="#fff" opacity=".6"/><rect y="140" width="340" height="10" fill="${N}" opacity=".6"/>`,
+sav:`<circle cx="250" cy="110" r="36" fill="#ffb347" opacity=".9"/><path d="M0 150q90-40 200-20t140-10v30z" fill="${N}" opacity=".6"/><rect x="108" y="88" width="6" height="52" fill="${N}"/><ellipse cx="111" cy="86" rx="48" ry="10" fill="${N}"/>`,
+globe:`<circle cx="170" cy="75" r="52" fill="none" stroke="#fff" opacity=".5" stroke-width="2"/><ellipse cx="170" cy="75" rx="22" ry="52" fill="none" stroke="#fff" opacity=".4"/><path d="M118 75h104M128 52h84M128 98h84" stroke="#fff" opacity=".35"/>`};
+return `<svg viewBox="0 0 340 150" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true"><defs><linearGradient id="g${c}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${g[0]}"/><stop offset="1" stop-color="${g[1]}"/></linearGradient></defs><rect width="340" height="150" fill="url(#g${c})"/>${S[t]}</svg>`}
+
+const TG={bch:"plages|beaches|playas",mtn:"montagnes|mountains|montañas",des:"déserts|deserts|desiertos",rf:"forêt tropicale|rainforest|selva tropical",sav:"safaris|safaris|safaris",rui:"ruines antiques|ancient ruins|ruinas antiguas",col:"villes coloniales|colonial towns|ciudades coloniales",isl:"îles|islands|islas",vol:"volcans|volcanoes|volcanes",lak:"lacs|lakes|lagos",fjo:"fjords|fjords|fiordos",wine:"vignobles|vineyards|viñedos",cas:"châteaux|castles|castillos",tmp:"temples|temples|templos",cty:"vie urbaine|city life|vida urbana",ski:"sports d'hiver|winter sports|deportes de invierno",reef:"récifs coralliens|coral reefs|arrecifes de coral",wat:"cascades|waterfalls|cascadas",hik:"randonnées|hiking|senderismo",fol:"traditions locales|local traditions|tradiciones locales",cui:"cuisine locale|local cuisine|cocina local",his:"patrimoine historique|historic heritage|patrimonio histórico",wld:"faune sauvage|wildlife|fauna salvaje",sea:"mer turquoise|turquoise seas|mar turquesa",mos:"mosquées|mosques|mezquitas",chu:"églises anciennes|old churches|iglesias antiguas",fro:"grands espaces|wide-open spaces|grandes espacios",spa:"sources chaudes|hot springs|aguas termales",div:"plongée|diving|buceo",ice:"glaciers|glaciers|glaciares",cru:"rivières et gorges|rivers and gorges|ríos y gargantas",mkt:"marchés colorés|colourful markets|mercados coloridos",flo:"champs de fleurs|flower fields|campos de flores"};
+const GT={plage:"#0891b2,#102B5C",aventure:"#16a34a,#102B5C",culture:"#7c3aed,#102B5C",gastronomie:"#ea580c,#102B5C",nature:"#0d9488,#102B5C"};
+const TB=`BD|as|Dhaka|bn|BDT|40|11-3|nature|rf,wld,fol
+BE|eu|Bruxelles|nl,fr,de|EUR|120|4-9|gastronomie|his,cui,cas
+BF|af|Ouagadougou|fr|XOF|50|11-2|culture|fol,mkt,his|w
+BG|eu|Sofia|bg|EUR|60|5-9|nature|mtn,bch,his
+BA|eu|Sarajevo|bs,hr,sr|BAM|55|5-9|culture|his,mtn,cru
+BN|as|Bandar Seri Begawan|ms|BND|90|2-5|culture|mos,rf,fol
+BO|sa|Sucre|es,qu|BOB|50|5-10|aventure|des,mtn,col
+BI|af|Gitega|rn,fr|BIF|45|6-9|nature|lak,wld,hik
+BJ|af|Porto-Novo|fr|XOF|55|11-3|culture|fol,his,bch
+BT|as|Thimphou|dz|BTN|200|3-5,9-11|culture|mtn,tmp,hik
+JM|na|Kingston|en|JMD|100|12-4|plage|bch,wat,fol
+BW|af|Gaborone|en,tn|BWP|180|5-10|aventure|sav,wld,cru
+BS|na|Nassau|en|BSD|180|12-4|plage|bch,isl,div
+BY|eu|Minsk|be,ru|BYN|50|5-9|culture|his,cas,fro|w
+BZ|na|Belmopan|en,es|BZD|110|12-4|plage|reef,div,rui
+RU|eu|Moscou|ru|RUB|80|6-9|culture|his,cty,fro|w
+RW|af|Kigali|rw,en,fr|RWF|120|6-9|nature|wld,mtn,hik
+RS|eu|Belgrade|sr|RSD|60|5-9|culture|cty,his,cru
+LT|eu|Vilnius|lt|EUR|75|5-9|culture|his,cty,bch
+LU|eu|Luxembourg|lb,fr,de|EUR|130|5-9|culture|cas,his,hik
+LR|af|Monrovia|en|LRD|70|11-4|nature|bch,rf,fol
+RO|eu|Bucarest|ro|RON|65|5-9|culture|cas,mtn,his
+GW|af|Bissau|pt|XOF|55|12-4|nature|isl,rf,fol
+GT|na|Guatemala|es|GTQ|65|11-4|culture|rui,vol,lak
+GQ|af|Malabo|es,fr|XAF|90|6-8,12-2|nature|isl,rf,bch
+GY|sa|Georgetown|en|GYD|90|2-5,8-10|nature|rf,wat,wld
+GE|as|Tbilissi|ka|GEL|55|5-9|culture|mtn,wine,chu
+GB|eu|Londres|en|GBP|150|5-9|culture|cty,cas,his
+GA|af|Libreville|fr|XAF|110|6-8|nature|rf,wld,bch
+GN|af|Conakry|fr|GNF|60|11-4|nature|wat,mtn,fol
+GM|af|Banjul|en|GMD|60|11-5|plage|bch,wld,cru
+GL|na|Nuuk|kl,da|DKK|170|6-8|nature|ice,fjo,fro
+KW|as|Koweït|ar|KWD|110|11-3|culture|cty,mos,sea
+GH|af|Accra|en|GHS|60|11-3|culture|bch,his,fol
+OM|as|Mascate|ar|OMR|100|10-4|aventure|des,mtn,sea
+JO|as|Amman|ar|JOD|95|3-5,9-11|culture|rui,des,sea
+HR|eu|Zagreb|hr|EUR|95|5-6,9|plage|isl,bch,his
+HT|na|Port-au-Prince|ht,fr|HTG|80|12-3|nature|mtn,fol,bch|w
+HU|eu|Budapest|hu|HUF|70|4-6,9-10|culture|cty,spa,his
+HN|na|Tégucigalpa|es|HNL|65|2-5|aventure|reef,rui,div
+PR|na|San Juan|es,en|USD|120|12-4|plage|bch,his,rf
+PY|sa|Asunción|es,gn|PYG|55|5-9|nature|wat,rui,wld
+PA|na|Panama|es|PAB|90|12-4|plage|isl,rf,cty
+PG|oc|Port Moresby|en,tpi|PGK|140|5-10|aventure|div,rf,fol
+PK|as|Islamabad|ur,en|PKR|50|4-10|aventure|mtn,hik,his|w
+PH|as|Manille|fil,en|PHP|55|11-5|plage|isl,div,bch
+PL|eu|Varsovie|pl|PLN|75|5-9|culture|cty,his,cas
+ZM|af|Lusaka|en|ZMW|120|5-10|aventure|wat,sav,wld
+EE|eu|Tallinn|et|EUR|85|5-9|culture|his,cty,bch
+EC|sa|Quito|es|USD|75|6-9|aventure|isl,vol,rf
+AL|eu|Tirana|sq|ALL|55|5-9|plage|bch,mtn,his
+AO|af|Luanda|pt|AOA|110|5-9|aventure|wat,bch,fol
+KZ|as|Astana|kk,ru|KZT|70|5-9|aventure|fro,mtn,cty
+ET|af|Addis-Abeba|am|ETB|60|10-3|culture|chu,mtn,fol
+ZW|af|Harare|en,sn|USD|110|5-10|aventure|wat,wld,sav
+ER|af|Asmara|ti,ar|ERN|60|10-3|culture|his,sea,cty|w
+ME|eu|Podgorica|sr|EUR|70|5-9|plage|bch,mtn,his
+MD|eu|Chisinau|ro|MDL|50|5-9|culture|wine,cas,fol
+MG|af|Antananarivo|mg,fr|MGA|70|4-10|nature|wld,bch,rf
+UZ|as|Tachkent|uz|UZS|55|4-6,9-10|culture|his,mos,mkt
+MM|as|Naypyidaw|my|MMK|60|11-2|culture|tmp,rui,lak|w
+ML|af|Bamako|fr|XOF|55|11-2|culture|mos,his,fol|w
+MN|as|Oulan-Bator|mn|MNT|70|6-9|aventure|fro,des,fol
+MK|eu|Skopje|mk|MKD|50|5-9|culture|lak,his,mtn
+MW|af|Lilongwe|en,ny|MWK|60|5-10|nature|lak,wld,hik
+MR|af|Nouakchott|ar|MRU|65|11-2|aventure|des,fol,bch|w
+UG|af|Kampala|en,sw|UGX|100|6-9,12-2|aventure|wld,rf,lak
+MY|as|Kuala Lumpur|ms|MYR|55|3-10|culture|rf,isl,cty
+VU|oc|Port-Vila|bi,fr|VUV|120|5-10|aventure|vol,div,isl
+FI|eu|Helsinki|fi,sv|EUR|120|6-8,12-3|nature|lak,ski,fro
+FJ|oc|Suva|en,fj|FJD|120|5-10|plage|isl,reef,div
+NI|na|Managua|es|NIO|60|12-4|aventure|vol,col,lak
+NL|eu|Amsterdam|nl|EUR|120|4-5,9|culture|cty,flo,his
+NO|eu|Oslo|no|NOK|170|6-8|nature|fjo,fro,ski
+NA|af|Windhoek|en,af|NAD|90|5-10|aventure|des,wld,fro
+NC|oc|Nouméa|fr|XPF|130|9-11|plage|reef,isl,div
+NE|af|Niamey|fr|XOF|55|11-2|aventure|des,fol,his|w
+NG|af|Abuja|en|NGN|70|11-3|culture|fol,cty,bch|w
+NP|as|Katmandou|ne|NPR|40|3-5,10-11|aventure|mtn,hik,tmp
+CI|af|Yamoussoukro|fr|XOF|65|11-3|plage|bch,fol,rf
+CH|eu|Berne|de,fr,it|CHF|190|6-9,12-3|nature|mtn,ski,lak
+CO|sa|Bogota|es|COP|65|12-3,7-8|aventure|col,mtn,bch
+CN|as|Pékin|zh|CNY|75|4-5,9-10|culture|his,cty,mtn
+CM|af|Yaoundé|fr,en|XAF|80|11-2|nature|mtn,bch,wld
+CL|sa|Santiago|es|CLP|90|11-3|aventure|des,mtn,wine
+CG|af|Brazzaville|fr|XAF|100|6-9|nature|rf,wld,cru
+CF|af|Bangui|fr,sg|XAF|90|12-2|nature|rf,wld,cru|w
+CD|af|Kinshasa|fr,sw,ln|CDF|100|6-8|aventure|rf,wld,vol|w
+CZ|eu|Prague|cs|CZK|85|4-6,9-10|culture|cty,cas,his
+CY|eu|Nicosie|el,tr|EUR|100|4-6,9-10|plage|bch,his,mtn
+CR|na|San José|es|CRC|90|12-4|nature|rf,vol,bch
+CU|na|La Havane|es|CUP|80|11-4|culture|col,bch,fol
+SZ|af|Mbabane|en,ss|SZL|70|5-9|nature|wld,mtn,fol
+SY|as|Damas|ar|SYP|60|3-5,10-11|culture|his,rui,mkt|w
+KG|as|Bichkek|ky,ru|KGS|45|6-9|aventure|mtn,lak,hik
+SS|af|Djouba|en|SSP|80|12-2|nature|wld,fol,cru|w
+SR|sa|Paramaribo|nl|SRD|90|2-4,8-11|nature|rf,col,wld
+KH|as|Phnom Penh|km|KHR|50|11-3|culture|tmp,rui,mkt
+SV|na|San Salvador|es|USD|60|11-4|plage|bch,vol,col
+SK|eu|Bratislava|sk|EUR|75|5-9|nature|mtn,cas,hik
+KR|as|Séoul|ko|KRW|100|4-5,9-10|culture|cty,tmp,cui
+SI|eu|Ljubljana|sl|EUR|90|5-9|nature|lak,mtn,cas
+SO|af|Mogadiscio|so,ar|SOS|70|12-3|nature|bch,fol,his|w
+SN|af|Dakar|fr,wo|XOF|65|11-5|culture|bch,fol,wld
+SL|af|Freetown|en|SLE|60|11-4|plage|bch,rf,wld
+SB|oc|Honiara|en|SBD|140|5-10|aventure|div,isl,reef
+SA|as|Riyad|ar|SAR|110|11-3|culture|des,his,sea
+SE|eu|Stockholm|sv|SEK|140|6-8|nature|lak,isl,cty
+SD|af|Khartoum|ar,en|SDG|70|11-2|culture|rui,des,cru|w
+DO|na|Saint-Domingue|es|DOP|90|12-4|plage|bch,col,mtn
+DJ|af|Djibouti|fr,ar|DJF|120|11-3|aventure|des,div,lak
+DK|eu|Copenhague|da|DKK|150|5-9|culture|cty,cas,bch
+DE|eu|Berlin|de|EUR|110|5-9|culture|cty,cas,his
+YE|as|Sanaa|ar|YER|60|10-3|culture|his,isl,mtn|w
+AT|eu|Vienne|de|EUR|130|5-9,12-3|culture|ski,cty,lak
+DZ|af|Alger|ar,fr|DZD|60|3-5,10-11|aventure|des,rui,bch
+LV|eu|Riga|lv|EUR|75|5-9|culture|cty,his,bch
+UY|sa|Montevideo|es|UYU|90|12-3|plage|bch,col,wine
+LB|as|Beyrouth|ar|LBP|90|4-6,9-10|culture|his,cui,mtn|w
+LA|as|Vientiane|lo|LAK|45|11-3|culture|wat,tmp,cru
+TW|as|Taipei|zh|TWD|85|10-12,3-4|culture|cty,mtn,cui
+TT|na|Port-d'Espagne|en|TTD|110|1-5|culture|bch,fol,wld
+LK|as|Colombo|si,ta|LKR|55|12-3|culture|tmp,bch,wld
+TN|af|Tunis|ar,fr|TND|60|4-6,9-10|plage|bch,rui,des
+TL|as|Dili|pt,tet|USD|60|5-11|nature|div,mtn,bch
+TM|as|Achgabat|tk|TMT|70|3-5,9-11|aventure|des,his,fol
+TJ|as|Douchanbé|tg|TJS|50|6-9|aventure|mtn,hik,lak
+LS|af|Maseru|st,en|LSL|80|10-4|nature|mtn,wat,hik
+TG|af|Lomé|fr|XOF|55|11-3|culture|fol,bch,mkt
+TD|af|N'Djamena|fr,ar|XAF|80|11-2|aventure|des,fol,lak|w
+LY|af|Tripoli|ar|LYD|70|10-4|culture|rui,des,bch|w
+AE|as|Abou Dabi|ar|AED|170|11-3|culture|cty,des,bch
+VE|sa|Caracas|es|VES|80|12-4|nature|wat,bch,mtn|w
+AF|as|Kaboul|fa,ps|AFN|60|4-5,9-10|culture|mtn,his,fol|w
+IQ|as|Bagdad|ar,ku|IQD|70|3-5,10-11|culture|rui,his,mkt|w
+IR|as|Téhéran|fa|IRR|60|3-5,9-11|culture|his,mos,mkt|w
+AM|as|Erevan|hy|AMD|60|5-9|culture|mtn,chu,wine
+IL|as|Jérusalem|he,ar|ILS|150|3-5,9-11|culture|his,sea,cty|w
+TZ|af|Dodoma|sw,en|TZS|130|6-10|aventure|sav,mtn,isl
+AZ|as|Bakou|az|AZN|75|4-6,9-10|culture|cty,his,mtn
+IE|eu|Dublin|en,ga|EUR|120|5-9|nature|fro,cas,fol
+UA|eu|Kiev|uk|UAH|60|5-9|culture|his,cty,chu|w
+QA|as|Doha|ar|QAR|140|11-3|culture|cty,des,sea
+MZ|af|Maputo|pt|MZN|90|5-10|plage|bch,div,isl`;
+const CAP={Londres:"Londres|London|Londres",Moscou:"Moscou|Moscow|Moscú","Bruxelles":"Bruxelles|Brussels|Bruselas",Vienne:"Vienne|Vienna|Viena",Prague:"Prague|Prague|Praga",Varsovie:"Varsovie|Warsaw|Varsovia",Copenhague:"Copenhague|Copenhagen|Copenhague",Bucarest:"Bucarest|Bucharest|Bucarest",Belgrade:"Belgrade|Belgrade|Belgrado",Berne:"Berne|Bern|Berna","Pékin":"Pékin|Beijing|Pekín","Séoul":"Séoul|Seoul|Seúl",Tbilissi:"Tbilissi|Tbilisi|Tiflis",Erevan:"Erevan|Yerevan|Ereván",Bakou:"Bakou|Baku|Bakú",Kiev:"Kiev|Kyiv|Kiev",Stockholm:"Stockholm|Stockholm|Estocolmo",Dublin:"Dublin|Dublin|Dublín",Amsterdam:"Amsterdam|Amsterdam|Ámsterdam","La Havane":"La Havane|Havana|La Habana","Saint-Domingue":"Saint-Domingue|Santo Domingo|Santo Domingo",Thimphou:"Thimphou|Thimphu|Timbu","Port-d'Espagne":"Port-d'Espagne|Port of Spain|Puerto España","Jérusalem":"Jérusalem|Jerusalem|Jerusalén",Katmandou:"Katmandou|Kathmandu|Katmandú","Oulan-Bator":"Oulan-Bator|Ulaanbaatar|Ulán Bator","Téhéran":"Téhéran|Tehran|Teherán",Bagdad:"Bagdad|Baghdad|Bagdad",Damas:"Damas|Damascus|Damasco",Riyad:"Riyad|Riyadh|Riad",Mascate:"Mascate|Muscat|Mascate","Koweït":"Koweït|Kuwait City|Ciudad de Kuwait","Abou Dabi":"Abou Dabi|Abu Dhabi|Abu Dabi",Tachkent:"Tachkent|Tashkent|Taskent",Bichkek:"Bichkek|Bishkek|Biskek","Douchanbé":"Douchanbé|Dushanbe|Dusambé",Achgabat:"Achgabat|Ashgabat|Asjabad",Manille:"Manille|Manila|Manila",Alger:"Alger|Algiers|Argel",Tunis:"Tunis|Tunis|Túnez",Tripoli:"Tripoli|Tripoli|Trípoli",Khartoum:"Khartoum|Khartoum|Jartum",Djouba:"Djouba|Juba|Yuba","Addis-Abeba":"Addis-Abeba|Addis Ababa|Adís Abeba","Kiev":"Kiev|Kyiv|Kiev",Nicosie:"Nicosie|Nicosia|Nicosia",Katmandou:"Katmandou|Kathmandu|Katmandú",Mogadiscio:"Mogadiscio|Mogadishu|Mogadiscio",Kaboul:"Kaboul|Kabul|Kabul",Sanaa:"Sanaa|Sanaa|Saná",Beyrouth:"Beyrouth|Beirut|Beirut",Djibouti:"Djibouti|Djibouti|Yibuti"};
+TB.split("\n").forEach(r=>{const[c,k,cap,l,cur,b,m,t,tg,w]=r.split("|");D[c]={k,cap:CAP[cap]||cap,l:l.split(","),cur,b:+b,m:m.split(",").flatMap(x=>{const[a,z=a]=x.split("-").map(Number);const o=[];for(let i=a;;i=i%12+1){o.push(i);if(i===z)break}return o}),t,g:GT[t],tg:tg.split(","),hl:tg.split(",").map(x=>TG[x]),w:!!w};
+const s=D[c].tg;TY[c]=s.some(x=>["bch","isl","reef"].includes(x))?"beach":s.some(x=>["mtn","ski","fjo","ice"].includes(x))?"mount":s.some(x=>["des","rui"].includes(x))?"pyr":s.some(x=>["sav","wld"].includes(x))?"sav":s.includes("cty")?"city":s.some(x=>["tmp","mos","chu"].includes(x))?"dome":"globe"});
+const dtext=c=>{const d=D[c];if(d.d)return d.d[LI()];const w=d.tg.map(x=>TG[x].split("|")[LI()]),a=w.slice(0,-1).join(", "),z=w[w.length-1],r=ranges(d.m);return[`Au programme : ${a} et ${z}. Meilleure période pour y aller : ${r}.`,`Highlights: ${a} and ${z}. Best time to go: ${r}.`,`Qué ver: ${a} y ${z}. Mejor época para ir: ${r}.`][LI()]};
+const $=s=>document.querySelector(s),flag=c=>[...c].map(x=>String.fromCodePoint(127397+x.charCodeAt())).join("");
+const paths=window.__W.paths;let L="fr",user=null,st={v:[],f:[],w:[]},mode="all",cur=null,pending=null;
+const LI=()=>({fr:0,en:1,es:2})[L],t=k=>(T[L][k]??T.fr[k]??k),tr=s=>{const a=s.split("|");return a[LI()]||a[0]};
+try{const sl=localStorage.getItem("vz_lang");L=T[sl]?sl:(["fr","en","es"].find(x=>(navigator.language||"").toLowerCase().startsWith(x))||"fr");user=localStorage.getItem("vz_user")}catch(e){}
+const nm=c=>{try{return new Intl.DisplayNames([L],{type:"region"}).of(c)}catch(e){return(paths[c]&&paths[c].name)||c}};
+const ln=x=>{try{const n=new Intl.DisplayNames([L],{type:"language"}).of(x);return n.charAt(0).toUpperCase()+n.slice(1)}catch(e){return x}};
+const cn=x=>{try{const n=new Intl.DisplayNames([L],{type:"currency"}).of(x);return n.charAt(0).toUpperCase()+n.slice(1)+" ("+x+")"}catch(e){return x}};
+const mo=(n,w)=>new Intl.DateTimeFormat(L,{month:w}).format(new Date(2024,n-1,1));
+function ranges(m){const on=Array.from({length:12},(_,i)=>m.includes(i+1));const s=on.findIndex(x=>!x);if(s<0)return"—";const o=[];for(let k=1;k<=12;k++){const i=(s+k)%12;if(on[i]){let b=i;while(k<12&&on[(b+1)%12]){b=(b+1)%12;k++}o.push(b===i?mo(i+1,"short"):mo(i+1,"short")+" – "+mo(b+1,"short"))}}return o.join(", ")}
+const bar=m=>`<div class="mb">${Array.from({length:12},(_,i)=>`<i class="${m.includes(i+1)?"on":""}" title="${mo(i+1,"long")}">${mo(i+1,"narrow")}</i>`).join("")}</div>`;
+const key=()=>"vz_d_"+user;
+function load(){st={v:[],f:[],w:[]};if(!user)return;try{st=Object.assign(st,JSON.parse(localStorage.getItem(key())||"{}"))}catch(e){}}
+function save(){try{localStorage.setItem(key(),JSON.stringify(st))}catch(e){toast(t("saveFail"))}}
+function toast(x){const e=$("#toast");e.textContent=x;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),2200)}
+function login(then){pending=then||null;$("#dlg").showModal();$("#uname").focus()}
+$("#ok").onclick=()=>{const n=$("#uname").value.trim();if(!n){$("#uname").style.borderColor="red";return}user=n;try{localStorage.setItem("vz_user",n)}catch(e){}load();$("#dlg").close();refresh();toast(t("welcome")+n+(L==="es"?" !":" !"));if(pending){pending();pending=null}};
+$("#cancel").onclick=()=>$("#dlg").close();
+$("#loginBtn").onclick=()=>{if(user){user=null;try{localStorage.removeItem("vz_user")}catch(e){}load();refresh();toast(t("bye"))}else login()};
+function act(a,c){need(()=>{const M={v:["addV","remV"],f:["addF","remF"],w:["addW","remW"]}[a],arr=st[a],i=arr.indexOf(c);i<0?arr.push(c):arr.splice(i,1);save();toast(i<0?(a==="v"?nm(c)+t("addV"):t(M[0])):t(M[1]));refresh();panel(c)})}
+function need(fn){if(!user)login(fn);else fn()}
+const map=new jsVectorMap({selector:"#map",map:"world",zoomButtons:true,zoomOnScroll:true,backgroundColor:"transparent",regionStyle:{initial:{fill:(getComputedStyle(document.documentElement).getPropertyValue("--land")||"#fff").trim(),stroke:"#cfdceb","stroke-width":.5},hover:{fill:"#8dbbf2",cursor:"pointer"}},onRegionClick:(e,c)=>panel(c),onRegionTooltipShow(e,tip,c){try{tip.text(nm(c))}catch(x){}}});
+matchMedia("(prefers-color-scheme:dark)").onchange=()=>location.reload();
+function paint(){document.querySelectorAll(".jvm-region").forEach(p=>{const c=p.getAttribute("data-code");p.classList.toggle("vis",mode!=="envies"&&st.v.includes(c));p.classList.toggle("wish",mode==="envies"&&st.w.includes(c));p.classList.toggle("dim",mode==="carnet"&&!st.v.includes(c));p.classList.toggle("cur",c===cur)})}
+$("#tools").onclick=e=>{const b=e.target.closest("button");if(!b)return;mode=b.dataset.m;document.querySelectorAll("#tools button").forEach(x=>x.classList.toggle("on",x===b));paint()};
+const info=d=>`<dl><dt>${t("cap")}</dt><dd>${tr(d.cap)}</dd><dt>${t("lng")}</dt><dd>${d.l.map(ln).join(", ")}</dd><dt>${t("cur")}</dt><dd>${cn(d.cur)}</dd><dt>${t("bud")}</dt><dd>${t("perDay").replace("{n}",d.b)}</dd></dl>`;
+const best=d=>`<div><b style="font-size:14px">${t("best")}</b>${bar(d.m)}<small>${ranges(d.m)}</small></div>`;
+function panel(c){cur=c;const d=D[c],p=$("#panel"),v=st.v.includes(c),f=st.f.includes(c),w=st.w.includes(c);
+p.innerHTML=`<div class="ph">${scene(c)}<button class="x" data-a="close" aria-label="${t("close")}">×</button><span class="fl" style="position:relative;filter:drop-shadow(0 2px 6px #0006)">${flag(c)}</span></div><div class="pb"><div><h2>${nm(c)}</h2><small>${d?t("c_"+d.k):t("noDetail")}</small></div>${d?`<p style="margin:0;color:var(--slate)">${dtext(c)}</p>${d.w?`<p class="warn">${t("warn")}</p>`:""}${info(d)}${best(d)}`:`<p style="margin:0;color:var(--slate)">${t("soon")}</p>`}
+<div class="row"><button class="btn" data-a="v" data-c="${c}">${v?t("isV"):t("markV")}</button><button class="btn ghost" data-a="f" data-c="${c}">${f?t("isFav"):t("fav")}</button><button class="btn ghost" data-a="w" data-c="${c}">${w?t("isWish"):t("wish")}</button></div>${d?`<button class="btn ghost" data-a="disc" data-c="${c}">${t("disc")}</button>`:""}</div>`;
+p.classList.add("open");paint()}
+$("#panel").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,c=b.dataset.c;if(a==="close")closeP();else if(a==="disc")disc(c);else act(a,c)};
+function closeP(){cur=null;$("#panel").classList.remove("open");paint()}
+function disc(c){const d=D[c];$("#disc").innerHTML=`<div class="ph" style="border-radius:14px;margin-bottom:14px">${scene(c)}</div><h3>${flag(c)} ${nm(c)}</h3><p style="color:var(--slate)">${dtext(c)}</p>${d.w?`<p class="warn">${t("warn")}</p>`:""}<b>${t("mustSee")}</b><ul>${d.hl.map(x=>`<li>${tr(x)}</li>`).join("")}</ul>${best(d)}<p></p><button class="btn" onclick="this.closest('dialog').close()">${t("close")}</button>`;$("#disc").showModal()}
+function locate(c){document.getElementById("carte").scrollIntoView();try{map.setFocus({region:c,animate:true})}catch(e){}panel(c)}
+const q=$("#q"),res=$("#res"),norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+q.oninput=()=>{const x=norm(q.value.trim());if(!x){res.hidden=true;return}const m=Object.keys(paths).filter(c=>norm(nm(c)).includes(x)||norm(paths[c].name||"").includes(x)).slice(0,6);res.hidden=false;res.innerHTML=m.length?m.map(c=>`<button data-c="${c}">${flag(c)} ${nm(c)}</button>`).join(""):`<button disabled>${t("noRes")}</button>`};
+res.onclick=e=>{const b=e.target.closest("[data-c]");if(b){locate(b.dataset.c);res.hidden=true;q.value=nm(b.dataset.c)}};
+q.onkeydown=e=>{if(e.key==="Enter"){const b=res.querySelector("[data-c]");if(b)b.click()}};
+function stats(){const cont=new Set(st.v.filter(c=>D[c]).map(c=>D[c].k)),n=Object.keys(paths).length;
+$("#stats").innerHTML=!user?`<div class="msg"><div><b>${t("startT")}</b><br>${t("startP")}</div><button class="btn" onclick="login()">${t("login")}</button></div>`:!st.v.length?`<div class="msg"><div><b>${t("firstT")}</b><br>${t("firstP")}</div></div>`:`<div class="st"><b>${st.v.length}</b><span>${t("stV")}</span></div><div class="st"><b>${cont.size}</b><span>${t("stC")}</span></div><div class="st"><b>${n-st.v.length}</b><span>${t("stL")}</span></div><div class="st"><b>${Math.round(st.v.length/n*100)}%</b><span>${t("stP")}</span></div>`}
+const chips=a=>a.length?`<div class="chips">${a.map(c=>`<button class="chip" data-c="${c}">${flag(c)} ${nm(c)}</button>`).join("")}</div>`:`<span style="color:var(--slate)">${t("none")}</span>`;
+let sel=null;
+function adv(){$("#adv").innerHTML=(sel?`<p><b>${t("sel")} « ${t("k_"+sel)} »</b></p>${chips(Object.keys(D).filter(c=>D[c].t===sel))}`:"")+(user?`<p><b>${t("favT")}</b></p>${chips(st.f)}<p><b>${t("wishT")}</b></p>${chips(st.w)}`:`<p style="color:var(--slate)">${t("needAcc")}</p><button class="btn" onclick="login()">${t("createAcc")}</button>`);$("#loginBtn").textContent=user?t("logout")+" ("+user+")":t("login")}
+$("#adv").onclick=e=>{const b=e.target.closest("[data-c]");if(b)locate(b.dataset.c)};
+const feat=[["JP","t1"],["IS","t2"],["GR","t3"],["IT","t4"],["PE","t5"],["NZ","t6"]],wants=[["w1","plage","#f59e0b,#e11d48"],["w2","aventure","#16a34a,#0f3d3e"],["w3","culture","#6d28d9,#102B5C"],["w4","gastronomie","#ea580c,#7c2d12"]];
+function tiles(){$("#mosaic").innerHTML=feat.map(([c,k])=>`<button class="tile ${k}" style="background:linear-gradient(160deg,${D[c].g})" data-c="${c}"><em>${t("k_"+D[c].t).toUpperCase()}</em><b>${tr(D[c].hl[0])}</b><span>${nm(c)}</span></button>`).join("");
+$("#four").innerHTML=wants.map(([w,k,g])=>`<button class="tile" style="background:linear-gradient(160deg,${g})" data-k="${k}"><b>${t(w)}</b><span>${t("seeSel")}</span></button>`).join("")}
+$("#mosaic").onclick=e=>{const b=e.target.closest("[data-c]");if(b)locate(b.dataset.c)};
+$("#four").onclick=e=>{const b=e.target.closest("[data-k]");if(b){sel=b.dataset.k;adv();document.getElementById("aventures").scrollIntoView()}};
+$("#favBtn").onclick=()=>document.getElementById("aventures").scrollIntoView();
+function refresh(){paint();stats();adv()}
+function applyLang(){document.documentElement.lang=L;document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));document.querySelectorAll("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));$("#lang").value=L;document.title="Voyazia — "+t("eyebrow").toLowerCase();tiles();refresh();if(cur)panel(cur);q.oninput()}
+$("#lang").onchange=e=>{L=e.target.value;try{localStorage.setItem("vz_lang",L)}catch(x){}applyLang()};
+load();applyLang();setTimeout(refresh,50);
+</script>
+<script src="photos.js"></script>
+<script src="offers.js"></script>
+<script src="config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="auth.js"></script>
+<script>(function(){var T={fr:"Mentions légales & confidentialité",en:"Legal notice & privacy (French)",es:"Aviso legal y privacidad (francés)"},a=document.getElementById("legalLink"),s=function(){a.textContent=T[document.getElementById("lang").value]||T.fr};document.getElementById("lang").addEventListener("change",s);s()})()</script>
+</body></html>
